@@ -21,12 +21,14 @@ public class JRDGui extends JFrame implements ActionListener{
     private final long UPPERBOUND = (long) Math.pow(2, 32);
     private final JFrame helpFrame;
     private final JButton helpButton;
+    private JFrame aboutFrame;
+    private JButton aboutButton;
     JFrame mainFrame;
 
     public JRDGui() {
         //Creating the main window
         mainFrame = new JFrame();
-        mainFrame.setTitle("Random Random Data'");
+        mainFrame.setTitle("Java Random Data");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(515, 305);
         mainFrame.setLocation(50, 50);
@@ -48,13 +50,25 @@ public class JRDGui extends JFrame implements ActionListener{
         helpFrame = new JFrame();
         helpFrame.setTitle("JRD Help");
         helpFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        helpFrame.setSize(200, 200);
+        helpFrame.setSize(500, 100);
         helpFrame.setResizable(false);
         helpFrame.setLayout(new GridBagLayout());
 
         //Adding the help window text
-        JLabel help_label = new JLabel("Please refer to the README");
+        JLabel help_label = new JLabel("<html>For information about the program please refer to the README file.</html>");
         helpFrame.add(help_label, c);
+
+        //Creating the about window
+        aboutFrame = new JFrame();
+        aboutFrame.setTitle("JRD About");
+        aboutFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        aboutFrame.setSize(400, 100);
+        aboutFrame.setResizable(false);
+        aboutFrame.setLayout(new GridBagLayout());
+
+        //Creating the about window text
+        JLabel about_label = new JLabel("<html>Simple Random Data Generator<br>© 2026 Stanislaw Miszczak. All Rights Reserved.</html>");
+        aboutFrame.add(about_label, c);
 
         //Creating the field for user input, generate button and such
         g.ipadx = 90;
@@ -70,11 +84,17 @@ public class JRDGui extends JFrame implements ActionListener{
         helpButton.addActionListener(this);
         toolbar.add(helpButton, c);
 
+        //Adding the about button to the toolbox
+        c.gridx = 0;
+        c.gridy = 0;
+        aboutButton = new JButton("About");
+        aboutButton.addActionListener(this);
+        toolbar.add(aboutButton, c);
+
         //Padding to fix a weird bug
         c.ipadx = 45;
         c.ipady = 20;
-        int UI_GAP = 3;
-        c.insets = new Insets(0, UI_GAP, UI_GAP, UI_GAP);
+        c.insets = new Insets(0, 3, 3, 3);
 
         //Adding an combobox(data type)
         c.gridx = 0;
@@ -202,6 +222,9 @@ public class JRDGui extends JFrame implements ActionListener{
         } else if (source == helpButton) {
             helpFrame.setLocation(mainFrame.getLocation());
             helpFrame.setVisible(true);
+        } else if (source == aboutButton) {
+            aboutFrame.setLocation(mainFrame.getLocation());
+            aboutFrame.setVisible(true);
         }
     }
 }

@@ -9,7 +9,7 @@ import java.security.SecureRandom;
 import java.security.Security;
 import java.util.*;
 
-class JRDCli{
+class JRDCli {
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
         final long UPPERBOUND = (long) Math.pow(2, 32);
         String generator;
