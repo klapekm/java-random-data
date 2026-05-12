@@ -2,7 +2,7 @@
 # Java Random Data Generator
 Generates either text or binary files composing of random numbers generated using users choice of java generator.
 ## Window Version
-[<img width="552" height="341" alt="JRDGui_screenshot" src="https://github.com/user-attachments/assets/239bbfeb-a346-4892-92ab-f963391c3c9f" />](https://github.com/klapekm/java-random-data/blob/master/JRDGui_screenshot.png)
+[[<img width="552" height="341" alt="JRDGui_screenshot" src="https://github.com/user-attachments/assets/239bbfeb-a346-4892-92ab-f963391c3c9f" />](https://github.com/klapekm/java-random-data/blob/master/JRDGui_screenshot.png)](https://github.com/klapekm/java-random-data/blob/master/JRDGui_screenshot2.png)
 
 To use run the JDRGuiRun file, then follow those steps:
 
