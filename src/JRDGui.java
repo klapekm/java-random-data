@@ -21,8 +21,8 @@ public class JRDGui extends JFrame implements ActionListener{
     private final long UPPERBOUND = (long) Math.pow(2, 32);
     private final JFrame helpFrame;
     private final JButton helpButton;
-    private JFrame aboutFrame;
-    private JButton aboutButton;
+    private final JFrame aboutFrame;
+    private final JButton aboutButton;
     JFrame mainFrame;
 
     public JRDGui() {
@@ -158,6 +158,7 @@ public class JRDGui extends JFrame implements ActionListener{
         clearButton.addActionListener(this);
 
         mainFrame.setVisible(true);
+
     }
     @Override
     public void actionPerformed(ActionEvent a) {
@@ -166,10 +167,10 @@ public class JRDGui extends JFrame implements ActionListener{
             String loc = localization.getText();
             String size = fileSize.getText();
             SecureRandom rndGen;
-            int choice_id = data_type.getSelectedIndex();
+            int choiceId = data_type.getSelectedIndex();
             //If the localization input window is empty fill it with an example path
             if (Objects.equals(loc, "")) {
-                if (choice_id == 0) {
+                if (choiceId == 0) {
                     localization.setText(generators.getSelectedItem() + "_sample" + ".txt");
                 }
                 else {
@@ -186,36 +187,38 @@ public class JRDGui extends JFrame implements ActionListener{
                 }
                 try {
                     //Creating either a bin or txt file based on user choice
-                    if (choice_id == 0) {
-                        //Opening or creating a file
-                        FileWriter myFileWriter = new FileWriter(loc);
-                        myFileWriter.flush();
-                        //Writing the header
-                        myFileWriter.write("#==================================================================\n" +
-                                "# generator Java " + generators.getSelectedItem() + "\n" +
-                                "#==================================================================\n");
-                        myFileWriter.write("type: d\n" + "count: " + size + "\n" + "numbit: 32\n");
-                        //Writing the random numbers
-                        for (int i = 0; i < (Integer.parseInt(size)); i++) {
-                            myFileWriter.write(rndGen.nextLong(UPPERBOUND) + "\n");
+                    File myFile = new File(loc);
+                    if (doesFileExist(myFile)) {
+                        if (choiceId == 0) {
+                            //Opening or creating a file
+                            FileWriter myFileWriter = new FileWriter(myFile);
+                            myFileWriter.flush();
+                            //Writing the header
+                            myFileWriter.write("#==================================================================\n" +
+                                    "# generator Java " + generators.getSelectedItem() + "\n" +
+                                    "#==================================================================\n");
+                            myFileWriter.write("type: d\n" + "count: " + size + "\n" + "numbit: 32\n");
+                            //Writing the random numbers
+                            for (int i = 0; i < (Integer.parseInt(size)); i++) {
+                                myFileWriter.write(rndGen.nextLong(UPPERBOUND) + "\n");
+                            }
+                            myFileWriter.close();
+                        } else {
+                            //Opening or creating a file
+                            DataOutputStream myOutputStream = new DataOutputStream(new FileOutputStream(myFile));
+                            myOutputStream.flush();
+                            //Generating and writing random bytes
+                            byte[] my_bytes = new byte[Integer.parseInt(size) * 1048576];
+                            rndGen.nextBytes(my_bytes);
+                            myOutputStream.write(ByteBuffer.wrap(my_bytes).array());
+                            myOutputStream.close();
                         }
-                        myFileWriter.close();
-                    } else {
-                        //Opening or creating a file
-                        DataOutputStream myOutputStream = new DataOutputStream(new FileOutputStream(loc));
-                        myOutputStream.flush();
-                        //Generating and writing random bytes
-                        byte[] my_bytes = new byte[Integer.parseInt(size)*1048576];
-                        rndGen.nextBytes(my_bytes);
-                        myOutputStream.write(ByteBuffer.wrap(my_bytes).array());
-                        myOutputStream.close();
                     }
 
                 } catch (IOException e) {
-                    System.out.println("ojojoj");
+                    System.out.println(e);
                 }
             }
-
         }
         if (source == clearButton) {
             localization.setText("");
@@ -225,6 +228,20 @@ public class JRDGui extends JFrame implements ActionListener{
         } else if (source == aboutButton) {
             aboutFrame.setLocation(mainFrame.getLocation());
             aboutFrame.setVisible(true);
+        }
+
+    }
+    //Function that checks if a file exists, if it does ask user if he wants it overwritten and return either true or false, if it does not return true
+    public boolean doesFileExist(File file) {
+        if (file.exists()) {
+            Object[] overwriteOptions = {"Yes", "No"};
+            int overWriteChoiceId = JOptionPane.showOptionDialog(mainFrame, "<html>This file already exists," +
+                            "<br> are you sure you want to overwrite it?</html>", "Overwrite Warning",
+                    JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE,
+                    null, overwriteOptions, overwriteOptions[1]);
+            return overWriteChoiceId == 0;
+        } else {
+            return true;
         }
     }
 }
